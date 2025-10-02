@@ -1,39 +1,33 @@
 <template>
   <form @submit.prevent="submit">
     <v-text-field
-      v-model="name.value.value"
-      :counter="10"
-      :error-messages="name.errorMessage.value"
-      label="Name"
+      v-model="userVO.userId"
+      label="아아디"
     ></v-text-field>
 
     <v-text-field
-      v-model="phone.value.value"
-      :counter="7"
-      :error-messages="phone.errorMessage.value"
-      label="Phone Number"
+      v-model="userVO.userPw"
+      label="비밀번호"
     ></v-text-field>
 
     <v-text-field
-      v-model="email.value.value"
-      :error-messages="email.errorMessage.value"
-      label="E-mail"
+      v-model="userVO.userNm"
+      label="이름"
     ></v-text-field>
-
-    <v-select
-      v-model="select.value.value"
-      :error-messages="select.errorMessage.value"
-      :items="items"
-      label="Select"
-    ></v-select>
 
     <v-checkbox
-      v-model="checkbox.value.value"
-      :error-messages="checkbox.errorMessage.value"
-      label="Option"
-      type="checkbox"
-      value="1"
+      v-model="userVO.userAuthList"
+      v-for="userAuth in userVO.userAuthVOList"
+      :key="userAuth"
+      :label="userAuth.userAuth"
+      :value="userAuth.authNm"
     ></v-checkbox>
+
+    <v-file-input
+      v-model="userVO.boFiles"
+      label="파일"
+      accept="image/*"
+    ></v-file-input>
 
     <v-btn
       class="me-4"
@@ -42,9 +36,6 @@
       submit
     </v-btn>
 
-    <v-btn @click="handleReset">
-      clear
-    </v-btn>
   </form>
 </template>
 
