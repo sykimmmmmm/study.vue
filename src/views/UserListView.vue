@@ -18,10 +18,12 @@
             <td>{{user.userNm}}</td>
             <td>{{user.rgstId}}</td>
             <td>{{user.rgstDt}}</td>
-        
         </tr>
     </tbody>
     </v-table>
+    <v-row class="mt-6" justify="end" align="center">
+        <v-btn class="me-2"> <router-link :to="`/userRegisterForm`">등록</router-link> </v-btn>
+    </v-row>
 </template>
 
 <script>
@@ -57,7 +59,7 @@ export default defineComponent({
                 console.log(err)
             }
             
-        },
+        }
     },
     mounted() {
         this.getUserList()

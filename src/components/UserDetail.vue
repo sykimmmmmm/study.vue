@@ -103,15 +103,13 @@
 <script>
     import avatar from "@/assets/avatar.png"
     import Axios from 'axios'
-    import { ref } from 'vue';
     
-    let router = null;
-    let userId = ref("");
-
     export default {
         name: 'UserDetail',
         data() {
             return {
+                router:'',
+                userId : '',
                 userVO : {},
                 fileVO : {},
                 defaultImg : avatar
@@ -133,16 +131,44 @@
                 this.fileVO = this.userVO.fileVO;
             },
             goList(){
-                router.push("/userList")
+                this.router.push("/userList")
             },
             goUpdateForm(){
-                router.push({name:"userUpdateForm", params:{userId:userId.value } })
-            }
+                this.router.push({name:"userUpdateForm", params:{userId:this.userId} })
+            },
+            deleteUser(){
+                if(confirm('정말로 삭제하시겠습니까?')){
+                    const formData = new FormData();
+                    this.userVO.delYn = 'Y';
+                    this.makeFormData(formData,this.userVO);
+                    Axios.post(`/api/users/${this.userId}`,formData)
+                    .then((res)=>{
+                        if(res.data.status === 'OK'){
+                            this.router.push("/userList");
+                        }
+                    })
+                }
+            },
+            makeFormData(formData,data){
+                formData.append(
+                    "userVO",
+                    new Blob([JSON.stringify(data)], { type: "application/json" })
+                );
+
+                // 파일이 존재할 경우 파일 리스트 추가
+                if (data.boFiles && Array.isArray(data.boFiles)) {
+                    data.boFiles.forEach(file => {
+                        if (file instanceof File) {
+                            formData.append("boFiles", file);
+                        }
+                    });
+                }
+            },
         },
         mounted(){
-            userId.value = this.$route.params.userId
-            this.loadUser(userId.value);
-            router = this.$router
+            this.userId = this.$route.params.userId
+            this.loadUser(this.userId);
+            this.router = this.$router
             
         }
     }
